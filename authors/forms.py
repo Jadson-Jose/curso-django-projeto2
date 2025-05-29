@@ -11,3 +11,4 @@ class RegisterForm(forms.ModelForm):
             'email',
             'password',
         ]
+        
