@@ -18,7 +18,7 @@ def strong_password(password):
     if not regex.match(password):
         raise ValidationError(
             (
-                'Password must be have at least one uppercase letter.',
+                'Password must be have at least one uppercase letter.'
                 'one lowercase letter and one number. The length should be at least 8 characteres'
             ),
             code='Invalid'
@@ -35,6 +35,20 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['password'], 'Type your password')
         add_placeholder(self.fields['password2'], 'Repeat your password')
     
+    
+    username = forms.CharField(
+        label= 'Username',
+        help_text= (
+            'Username must have letters, numbers or one of those @.+-_. ',
+            'The lengh should be between 4 and 150 characters.'
+            ),
+        error_messages= {
+           'required': 'This field must not be empty',
+           'min_length': 'Username must have at least 4 characters',
+           'max_length': 'Username must have less than 150 characters',
+        },
+        min_length=4, max_length=150
+    )
     
     first_name  = forms.CharField(
         error_messages={'required': 'Write your first name'},
@@ -91,15 +105,17 @@ class RegisterForm(forms.ModelForm):
             'last_name': 'Last_name',
             'email': 'E-mail',
         }
-        
-        
-        error_messages = {
-            'username' : {
-                'required': 'This field must not be empty',
-                'invalid': 'This field is invalid'
-            }
-        }
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email','')
+        exists = User.objects.filter(email=email).exists()
+        
+        if exists:
+            raise ValidationError(
+                'User e-mail is alredy in use', code='invalid',
+                )
+        
+        return email
     
     def clean(self):
         cleaned_data = super().clean()
