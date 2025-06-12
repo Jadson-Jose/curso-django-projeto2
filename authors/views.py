@@ -67,3 +67,14 @@ def login_create(request):
         messages.error(request, 'Invalid username or password')
 
     return redirect(reverse('authors:login'))
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def logout_view(request):
+    if not request.POST:
+        return redirect(reverse('authors:login'))
+    if request.POST.get('username') != request.user.username:
+        print('Invali username', request.POST, request.user)
+        return redirect(reverse('authors:login'))
+    logout(request)
+    return redirect(reverse('authors:login'))
