@@ -120,3 +120,4 @@ db.sqlite3
 bin/chromedriver/chrome
 bin/chromedriver/chrome-linux64.zip
 bin/chromedriver/
+bin/chromedriver/
