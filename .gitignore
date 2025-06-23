@@ -102,6 +102,18 @@ ENV/
 .DS_Store
 Thumbs.db
 
+# Pastas e arquivos do Python
+__pycache__/
+*.py[cod]
+*.egg-info/
 
-# Arquivos de migração do Django (opcional, geralmente são versionados)
-# **/migrations/
+# Ambiente virtual
+venv/
+
+# ChromeDriver (caso você deixe ele em bin/)
+/bin/chromedriver
+
+# Logs, banco de dados SQLite, etc.
+*.log
+db.sqlite3
+
