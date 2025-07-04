@@ -1,10 +1,9 @@
-from django.test import TestCase
 from django.urls import resolve, reverse
 from recipes import views
+from recipes.models import Recipe
+from .test_recipe_base import RecipeTestBase
 
-        
-        
-class RecipeViwesTest(TestCase):
+class RecipeViwesTest(RecipeTestBase):    
     def test_recipe_home_viewsfunction_is_correct(self):
         view = resolve(reverse("recipes:home"))
         self.assertIs(view.func, views.home)
@@ -27,6 +26,18 @@ class RecipeViwesTest(TestCase):
     def test_recipe_home_view_loads_correct_template(self):
         response = self.client.get(reverse('recipes:home'))
         self.assertTemplateUsed(response, 'recipes/pages/home.html')
+        
+        
+    def test_recipe_home_template_loads_recipes(self):
+        self.make_recipe()
+        response = self.client.get(reverse('recipes:home'))
+        content = response.content.decode('utf-8')
+        reponse_context_recipes = response.context['recipes']
+        self.assertIn('Recipe Title', content)
+        self.assertIn('10 Minutos', content)
+        self.assertIn('5 Porções', content)
+        self.assertEqual(len(reponse_context_recipes), 1)
+        
         
     def test_recipe_category_view_function_is_correct(self):
         view = resolve(
