@@ -1,0 +1,9 @@
+[run]
+
+branch = True
+omit = 
+    venv/*
+    */venv/*
+    **/test*.py
+    **/*test*.py
+    manage.py

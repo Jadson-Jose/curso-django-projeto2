@@ -4,6 +4,7 @@ from .models import Recipe, Category
 from django.http import Http404
 from django.db.models import Q
 from utils.pagination import make_pagination
+from django.shortcuts import render
 
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
@@ -70,4 +71,3 @@ def search(request):
                    'pagination_range': pagination_range,
                    'additional_url_query': f'&q={search_term}',
                    })
-    
