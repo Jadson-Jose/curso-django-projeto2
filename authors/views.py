@@ -2,12 +2,15 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from authors.templates.authors.forms.login import LoginForm
 from authors.templates.authors.forms.recipe_form import AuthorRecipeForm
 from authors.templates.authors.forms.register_form import RegisterForm
 from recipes.models import Recipe
+from django.views.generic import TemplateView
+from authors.models import Profile
+
 
 
 def register_view(request):
@@ -166,3 +169,17 @@ def dashboard_recipe_delete(request):
     recipe.delete()
     messages.success(request, 'Delete successfully.')
     return redirect(reverse('authors:dashboard'))
+
+class ProfileView(TemplateView):
+    template_name = 'authors/pages/profile.html'
+    
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        profile_id = context.get('id')
+        profile = get_object_or_404(Profile.objects.filter(
+            pk=profile_id
+        ).select_related('author'), pk=profile_id)
+        return self.render_to_response({
+            **context,
+            'profile':profile,
+        })
