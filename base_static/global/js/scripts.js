@@ -1,17 +1,28 @@
-function my_scope() {
-    const forms = document.querySelectorAll('.form-delete')
+(() => {
+  const buttonCloseMenu = document.querySelector('.button-close-menu');
+  const buttonShowMenu = document.querySelector('.button-show-menu');
+  const menuContainer = document.querySelector('.menu-container');
 
-    for(const form of forms) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
+  const buttonShowMenuVisibleClass = 'button-show-menu-visible';
+  const menuHiddenClass = 'menu-hidden';
 
-            const confirmed = confirm('Are you sure?');
+  const closeMenu = () => {
+    buttonShowMenu.classList.add(buttonShowMenuVisibleClass);
+    menuContainer.classList.add(menuHiddenClass);
+  };
 
-            if(confirmed) {
-                form.submit();
-            }
-        });
-    }
-}
+  const showMenu = () => {
+    buttonShowMenu.classList.remove(buttonShowMenuVisibleClass);
+    menuContainer.classList.remove(menuHiddenClass);
+  };
 
-my_scope()
+  if (buttonCloseMenu) {
+    buttonCloseMenu.removeEventListener('click', closeMenu);
+    buttonCloseMenu.addEventListener('click', closeMenu);
+  }
+
+  if (buttonShowMenu) {
+    buttonCloseMenu.removeEventListener('click', showMenu);
+    buttonShowMenu.addEventListener('click', showMenu);
+  }
+})();
