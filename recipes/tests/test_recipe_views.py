@@ -1,11 +1,11 @@
 from django.urls import resolve, reverse
-from recipes import views
+from recipes.views import site
 from .test_recipe_base import RecipeTestBase
 
 class RecipeViwesTest(RecipeTestBase):    
     def test_recipe_home_viewsfunction_is_correct(self):
         view = resolve(reverse("recipes:home"))
-        self.assertIs(view.func, views.home)
+        self.assertIs(view.func, site.home)
         
         
     def test_recipe_home_view_returns_status_code_200_ok(self):
@@ -54,7 +54,7 @@ class RecipeViwesTest(RecipeTestBase):
         view = resolve(
             reverse('recipes:category', kwargs={'category_id': 500000})
         )
-        self.assertIs(view.func, views.category)
+        self.assertIs(view.func, site.category)
 
     def test_recipe_category_view_returns_404_if_no_recipes_found(self):
         response = self.client.get(
@@ -87,7 +87,7 @@ class RecipeViwesTest(RecipeTestBase):
         view = resolve(
             reverse('recipes:recipe', kwargs={'id': 1})
         )
-        self.assertIs(view.func, views.recipe)
+        self.assertIs(view.func, site.recipe)
         
     def test_recipe_detail_view_returns_404_if_no_recipes_found(self):
         response = self.client.get(

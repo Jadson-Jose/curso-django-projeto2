@@ -1,6 +1,6 @@
 import os
 from django.shortcuts import render, get_list_or_404, get_object_or_404
-from .models import Recipe, Category
+from ..models import Recipe, Category
 from django.http import Http404
 from django.db.models import Q
 from utils.pagination import make_pagination

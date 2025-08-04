@@ -1,13 +1,31 @@
+from operator import concat
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.text import slugify
+from django.db.models import F, Value
+from django.db.models.functions import Concat
+
+
 
 class Category(models.Model):
     name = models.CharField(max_length=65)
     
     def __str__(self):
         return self.name
+    
+    
+class RecipeManager(models.Manager):
+    def get_published(self):
+        return self.filter(
+            is_published=True
+        ).annotate(
+            author_full_name=Concat(
+                F('author__first_name'), Value(' '),
+                F('author__last_name'), Value(' ('),
+                F('author__username'), Value(') '),
+            )
+        ).order_by('-id')
     
 class Recipe(models.Model):
     title = models.CharField(max_length=65)
@@ -28,6 +46,8 @@ class Recipe(models.Model):
                                  default=None
                                  )
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    
+    objects = RecipeManager()
 
 
     def __str__(self):
