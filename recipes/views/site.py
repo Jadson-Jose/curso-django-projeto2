@@ -59,7 +59,7 @@ def search(request):
             Q(description__icontains=search_term),
         ),
         is_published = True
-    ).select_related("category", "author").order_by("-id")
+    ).select_related("category", "author", "author__profile").order_by("-id")
     
     page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
 
