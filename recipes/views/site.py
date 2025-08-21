@@ -12,7 +12,7 @@ PER_PAGE = int(os.environ.get('PER_PAGE', 6))
 def home(request):
     recipes = Recipe.objects.filter(
         is_published=True    
-    ).order_by('-id')
+    ).select_related("category", "author", "author__profile").order_by('-id')
     
     
     page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
@@ -28,7 +28,7 @@ def category(request, category_id):
         Recipe.objects.filter(
             category=category,
             is_published=True  
-        ).order_by('-id')
+        ).select_related("category", "author").order_by('-id')
     )
     
     page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
@@ -59,7 +59,7 @@ def search(request):
             Q(description__icontains=search_term),
         ),
         is_published = True
-    ).order_by("-id")
+    ).select_related("category", "author").order_by("-id")
     
     page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
 
